@@ -24,6 +24,8 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseInputEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -84,6 +86,14 @@ public class ClientEventHandler
 					ev.getTooltipElements().add(1, Either.left(new TranslatableComponent("tooltip." + ModSpartanWeaponry.ID + ".oilable").withStyle(ChatFormatting.BLUE)));
 			});
 		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public static void onRenderGuiEvent(RenderGameOverlayEvent.PreLayer ev)
+	{
+		Minecraft mc = Minecraft.getInstance();
+		if(ev.getOverlay() == ForgeIngameGui.CROSSHAIR_ELEMENT && mc.player.getMainHandItem().is(ModItemTags.HAS_CUSTOM_CROSSHAIR))
+			ev.setCanceled(true);
 	}
 	
 	// Debug NBT viewer; Enable if NBT needs to be debugged

@@ -159,6 +159,9 @@ public class ModItemTagsProvider extends ItemTagsProvider
 				ModItemTags.CLUBS, ModItemTags.BATTLE_HAMMERS, ModItemTags.WARHAMMERS, ModItemTags.SPEARS, ModItemTags.HALBERDS, ModItemTags.PIKES, ModItemTags.LANCES,
 				ModItemTags.BATTLEAXES, ModItemTags.FLANGED_MACES, ModItemTags.GLAIVES, ModItemTags.QUARTERSTAVES, ModItemTags.SCYTHES);
 		
+		tag(ModItemTags.THROWING_WEAPONS).addTags(ModItemTags.THROWING_KNIVES, ModItemTags.TOMAHAWKS, ModItemTags.JAVELINS, ModItemTags.BOOMERANGS);
+		tag(ModItemTags.HAS_CUSTOM_CROSSHAIR).addTags(ModItemTags.THROWING_WEAPONS, ModItemTags.HEAVY_CROSSBOWS);
+		
 		tag(ModItemTags.ZOMBIE_SPAWN_WEAPONS).add(ModItems.DAGGERS.iron.get(), ModItems.LONGSWORDS.iron.get(), ModItems.KATANAS.iron.get(), ModItems.SABERS.iron.get(), ModItems.RAPIERS.iron.get(),
 			ModItems.GREATSWORDS.iron.get(), ModItems.BATTLE_HAMMERS.iron.get(), ModItems.WARHAMMERS.iron.get(), ModItems.BATTLEAXES.iron.get(), ModItems.FLANGED_MACES.iron.get());
 		

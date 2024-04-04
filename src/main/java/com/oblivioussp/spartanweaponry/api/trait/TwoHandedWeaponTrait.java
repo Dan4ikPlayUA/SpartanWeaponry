@@ -35,7 +35,8 @@ public class TwoHandedWeaponTrait extends MeleeCallbackWeaponTrait
 		MobEffectInstance effect = entity.getEffect(MobEffects.DIG_SLOWDOWN);
 		
 		// If the weapon is equipped in the main-hand and anything else is equipped in the off-hand, give mining fatigue
-		if(isSelected && ItemStack.isSameIgnoreDurability(stack, mainHand) && !offHand.isEmpty())
+		if((isSelected && ItemStack.isSameIgnoreDurability(stack, mainHand) && !offHand.isEmpty()) ||
+				(ItemStack.isSameIgnoreDurability(stack, offHand) && !mainHand.isEmpty()))
 		{
 			// Apply Mining Fatigue as often as needed.
 			if(effect == null || effect.getDuration() <= 1)

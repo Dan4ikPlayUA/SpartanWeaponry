@@ -88,6 +88,9 @@ public class ModItemTags
 	
 	public static final TagKey<Item> HEADS = ItemTags.create(new ResourceLocation(SpartanWeaponryAPI.MOD_ID + ":heads"));
 	
+	public static final TagKey<Item> THROWING_WEAPONS = ItemTags.create(new ResourceLocation(SpartanWeaponryAPI.MOD_ID + ":throwing_weapons"));	
+	public static final TagKey<Item> HAS_CUSTOM_CROSSHAIR = ItemTags.create(new ResourceLocation(SpartanWeaponryAPI.MOD_ID + ":has_custom_crosshair"));
+	
 	// Materials for repairing weapons
 	public static final TagKey<Item> COBBLESTONE = ItemTags.create(new ResourceLocation("forge:cobblestone"));
 	public static final TagKey<Item> LEATHER = ItemTags.create(new ResourceLocation("forge:leather"));

@@ -373,7 +373,6 @@ public class SwordBaseItem extends SwordItem implements IWeaponTraitContainer<Sw
 			if(trait.canPerformToolAction(stack, toolAction))
 				return true;
 		}
-		/*return hasWeaponTraitWithType(WeaponTraits.TYPE_SWEEP_DAMAGE) ? super.canPerformAction(stack, toolAction) : DEFAULT_SWORD_NO_SWEEP_ACTIONS.contains(toolAction);*/
 		return archetype.canPerformToolAction(toolAction);
 	}
     

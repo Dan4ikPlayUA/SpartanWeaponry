@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.oblivioussp.spartanweaponry.ModSpartanWeaponry;
+import com.oblivioussp.spartanweaponry.compat.shouldersurfing.ShoulderSurfingCompat;
 import com.oblivioussp.spartanweaponry.item.IHudCrosshair;
 
 import net.minecraft.client.Camera;
@@ -21,6 +22,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.OverlayRegistry;
+import net.minecraftforge.fml.ModList;
 
 public class HudCrosshair
 {
@@ -50,16 +52,17 @@ public class HudCrosshair
 			
 			if(crosshairItem.getCrosshairHudElement() != null)
 			{
-				if(OverlayRegistry.getEntry(ForgeIngameGui.CROSSHAIR_ELEMENT).isEnabled())
-					OverlayRegistry.enableOverlay(ForgeIngameGui.CROSSHAIR_ELEMENT, false);
+//				if(OverlayRegistry.getEntry(ForgeIngameGui.CROSSHAIR_ELEMENT).isEnabled())
+//					OverlayRegistry.enableOverlay(ForgeIngameGui.CROSSHAIR_ELEMENT, false);
 				
-				if(options.getCameraType().isFirstPerson() && (mc.gameMode.getPlayerMode() != GameType.SPECTATOR || canRenderCrosshairForSpectator(mc)))
+				if((options.getCameraType().isFirstPerson() || (ModList.get().isLoaded("shouldersurfing") && ShoulderSurfingCompat.isShoulderSurfing())) 
+						&& (mc.gameMode.getPlayerMode() != GameType.SPECTATOR || canRenderCrosshairForSpectator(mc)))
 				{
+		            PoseStack posestack = new PoseStack();
 					// Do the debug rendering for crosshairs even with the custom crosshairs enabled
 		            if (options.renderDebug && !options.hideGui && !player.isReducedDebugInfo() && !options.reducedDebugInfo)
 		            {
 		               Camera camera = mc.gameRenderer.getMainCamera();
-		               PoseStack posestack = RenderSystem.getModelViewStack();
 		               posestack.pushPose();
 		               posestack.translate((double)(screenWidth / 2), (double)(screenHeight / 2), (double)gui.getBlitOffset());
 		               posestack.mulPose(Vector3f.XN.rotationDegrees(camera.getXRot()));
@@ -71,7 +74,7 @@ public class HudCrosshair
 		               RenderSystem.applyModelViewMatrix();
 		            }
 		            else
-		            	crosshairItem.getCrosshairHudElement().render(gui, mStack, partialTicks, screenWidth, screenHeight, equipStack);
+		            	crosshairItem.getCrosshairHudElement().render(gui, posestack, partialTicks, screenWidth, screenHeight, equipStack);
 				}
 			}
 		}

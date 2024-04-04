@@ -6,6 +6,7 @@ import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
+import com.oblivioussp.spartanweaponry.compat.shouldersurfing.ShoulderSurfingCompat;
 import com.oblivioussp.spartanweaponry.item.ThrowingWeaponItem;
 import com.oblivioussp.spartanweaponry.util.ClientConfig;
 
@@ -19,6 +20,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.fml.ModList;
 
 public class HudCrosshairThrowingWeapon
 {
@@ -28,6 +30,7 @@ public class HudCrosshairThrowingWeapon
 		
 		Minecraft mc = Minecraft.getInstance();
 		LocalPlayer player = mc.player;
+		boolean isShoulderSurfingLoaded = ModList.get().isLoaded("shouldersurfing");
 		
 		if((!ClientConfig.INSTANCE.disableNewCrosshairsThrowingWeapon.get() || ClientConfig.INSTANCE.forceCompatibilityCrosshairs.get()) &&
 				equippedStack.getItem() instanceof ThrowingWeaponItem throwingWeapon)	// Assert that the equipped stack is a Throwing Weapon; otherwise abort the rendering
@@ -40,6 +43,8 @@ public class HudCrosshairThrowingWeapon
 			}
 			
 			poseStack.pushPose();
+			if(isShoulderSurfingLoaded)
+				ShoulderSurfingCompat.offsetCrosshairs(poseStack, mc.getWindow(), partialTicks);
 			
 			RenderSystem.blendFuncSeparate(SourceFactor.ONE_MINUS_DST_COLOR, DestFactor.ONE_MINUS_SRC_COLOR, SourceFactor.ONE, DestFactor.ZERO);
 			RenderSystem.enableBlend();
@@ -100,7 +105,10 @@ public class HudCrosshairThrowingWeapon
 	        }
 
 	        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-	        
+
+			if(isShoulderSurfingLoaded)
+				ShoulderSurfingCompat.clearCrosshairOffset(poseStack);
+			
 	        if(equippedStack.getOrCreateTag().contains(ThrowingWeaponItem.NBT_AMMO_USED))
 	        {
 				int maxAmmo = throwingWeapon.getMaxAmmo(equippedStack);

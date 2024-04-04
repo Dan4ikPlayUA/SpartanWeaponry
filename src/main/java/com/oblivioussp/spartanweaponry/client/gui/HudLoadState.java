@@ -26,6 +26,7 @@ public class HudLoadState
 			ItemStack loadStack = ItemStack.EMPTY;
 			IHudLoadState loadItem = null;
 			boolean isOffhand = false;
+			PoseStack renderPoseStack = new PoseStack();
 			
 			// Get the item that this Hud element is being applied to
 			if(player.getMainHandItem().getItem() instanceof IHudLoadState)
@@ -59,7 +60,7 @@ public class HudLoadState
 					posY = mc.getWindow().getGuiScaledHeight() - 3 - Mth.clamp(Mth.floor((16 * loadProgress) + partialTicks), 0, 16);
 		
 				if(loadSlot != -1 || isOffhand)
-					ForgeIngameGui.fill(poseStack, posX, posY, posX + 16, (mc.getWindow().getGuiScaledHeight() - 19) + 16, colour);
+					ForgeIngameGui.fill(renderPoseStack, posX, posY, posX + 16, (mc.getWindow().getGuiScaledHeight() - 19) + 16, colour);
 			}
 		}
 	}

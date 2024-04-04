@@ -33,6 +33,7 @@ public class HudQuiverAmmo
 		Minecraft mc = Minecraft.getInstance();
 		Font font = mc.font;
 		LocalPlayer player = mc.player;
+		PoseStack renderPoseStack = new PoseStack();
 		
 		ItemStack quiverStack = ItemStack.EMPTY;
 		int ammoCount = 0;
@@ -75,26 +76,26 @@ public class HudQuiverAmmo
 		offsetX = AlignmentHelper.getAlignedX(align, ClientConfig.INSTANCE.quiverHudOffsetX.get(), 22);
 		offsetY = AlignmentHelper.getAlignedY(align, ClientConfig.INSTANCE.quiverHudOffsetY.get(), 22);
 		
-		poseStack.pushPose();
-        poseStack.translate(0.0D, 0.0D, (double)(mc.getItemRenderer().blitOffset + 200.0F));
+		renderPoseStack.pushPose();
+        renderPoseStack.translate(0.0D, 0.0D, (double)(mc.getItemRenderer().blitOffset + 200.0F));
         MultiBufferSource.BufferSource renderBuffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
         
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, WIDGETS);
         
-		mc.gui.blit(poseStack, offsetX, offsetY, 24, 23, 22, 22);
+		mc.gui.blit(renderPoseStack, offsetX, offsetY, 24, 23, 22, 22);
 		mc.getItemRenderer().renderAndDecorateItem(quiverStack, offsetX + 3, offsetY + 3);
-		font.drawInBatch(ammoStr, offsetX + 20 - font.width(ammoStr), offsetY + 13, ammoCount == 0 ? 0xFF6060 : 0xFFC000, true, poseStack.last().pose(), renderBuffer, false, 0, 0xF000F0);
+		font.drawInBatch(ammoStr, offsetX + 20 - font.width(ammoStr), offsetY + 13, ammoCount == 0 ? 0xFF6060 : 0xFFC000, true, renderPoseStack.last().pose(), renderBuffer, false, 0, 0xF000F0);
 		
 		// Draw the key (in text form) required to open this quiver
 		if(!KeyBinds.KEY_ACCESS_QUIVER.isUnbound())
 		{
 			String inventoryKey = "[" + KeyBinds.KEY_ACCESS_QUIVER.getTranslatedKeyMessage().getString().toUpperCase() + "]";
 			int keyTextYOffset = align.getVertical() == VerticalAlignment.TOP ? 22 : -8;
-			font.drawInBatch(inventoryKey, offsetX + 11 - ((float)font.width(inventoryKey) / 2.0f), offsetY + keyTextYOffset, 0xFFFFFF, true, poseStack.last().pose(), renderBuffer, false, 0, 0xF000F0);
+			font.drawInBatch(inventoryKey, offsetX + 11 - ((float)font.width(inventoryKey) / 2.0f), offsetY + keyTextYOffset, 0xFFFFFF, true, renderPoseStack.last().pose(), renderBuffer, false, 0, 0xF000F0);
 		}
 		renderBuffer.endBatch();
-		poseStack.popPose();
+		renderPoseStack.popPose();
 	}
 }

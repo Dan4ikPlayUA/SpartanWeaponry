@@ -1,11 +1,11 @@
 package com.oblivioussp.spartanweaponry.compat.shouldersurfing;
 
-import com.github.exopandora.shouldersurfing.client.ShoulderInstance;
+import com.github.exopandora.shouldersurfing.api.client.ShoulderSurfing;
 
 public class ShoulderSurfingCompat
 {
 	public static boolean isShoulderSurfing()
 	{
-		return ShoulderInstance.getInstance().doShoulderSurfing();
+		return ShoulderSurfing.getInstance().isShoulderSurfing();
 	}
 }

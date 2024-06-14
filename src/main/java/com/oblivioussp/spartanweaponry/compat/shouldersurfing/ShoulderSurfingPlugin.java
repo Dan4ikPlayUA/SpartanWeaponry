@@ -1,7 +1,7 @@
 package com.oblivioussp.spartanweaponry.compat.shouldersurfing;
 
-import com.github.exopandora.shouldersurfing.api.IShoulderSurfingPlugin;
-import com.github.exopandora.shouldersurfing.api.IShoulderSurfingRegistrar;
+import com.github.exopandora.shouldersurfing.api.plugin.IShoulderSurfingPlugin;
+import com.github.exopandora.shouldersurfing.api.plugin.IShoulderSurfingRegistrar;
 import com.oblivioussp.spartanweaponry.api.tags.ModItemTags;
 
 public class ShoulderSurfingPlugin implements IShoulderSurfingPlugin

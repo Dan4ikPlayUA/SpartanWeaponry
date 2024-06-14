@@ -182,7 +182,7 @@ dependencies {
 	// Compile against the the Curios API but don't include it at runtime
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curios_version}:api")
     
-	implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5321692")
+	implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5419210")
     implementation fg.deobf("curse.maven:footwork-api-608407:4786768")
     implementation fg.deobf("curse.maven:attributizer-838573:4784940")
     implementation fg.deobf("curse.maven:project-war-dance-446004:4718727")

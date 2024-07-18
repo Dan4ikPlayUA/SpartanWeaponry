@@ -327,7 +327,7 @@ public class WeaponHelper
                     
                     if(weaponItem.hasWeaponProperty(WeaponProperties.QUICK_STRIKE))
                     {
-                    	targetEntity.hurtResistantTime = ConfigHandler.quickStrikeHurtResistTicks;
+                    	targetEntity.hurtResistantTime = Math.min(targetEntity.hurtResistantTime, ConfigHandler.quickStrikeHurtResistTicks);
                     }
                 }
             }

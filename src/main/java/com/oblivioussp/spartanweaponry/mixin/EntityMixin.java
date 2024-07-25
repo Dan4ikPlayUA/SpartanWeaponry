@@ -15,6 +15,9 @@ public class EntityMixin
 	public World world;
 	
 	@Shadow
+	public boolean isDead;
+	
+	@Shadow
 	public Random rand;
 	
 	@Shadow

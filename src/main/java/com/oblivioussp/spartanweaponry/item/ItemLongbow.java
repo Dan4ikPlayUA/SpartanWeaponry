@@ -212,10 +212,8 @@ public class ItemLongbow extends ItemBow implements IHudQuiverDisplay
                         //entityarrow.setDamage(entityarrow.getDamage() * 1.25f);
                         
 //                        if (f == maxVelocity)
-                        if (i == getDrawTicks())
-                        {
+                        if (i >= getDrawTicks())
                             entityarrow.setIsCritical(true);
-                        }
 
                         int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
 

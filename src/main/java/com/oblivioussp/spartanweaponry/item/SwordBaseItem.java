@@ -4,6 +4,7 @@ package com.oblivioussp.spartanweaponry.item;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
@@ -15,6 +16,7 @@ import com.oblivioussp.spartanweaponry.api.IWeaponTraitContainer;
 import com.oblivioussp.spartanweaponry.api.ReloadableHandler;
 import com.oblivioussp.spartanweaponry.api.WeaponMaterial;
 import com.oblivioussp.spartanweaponry.api.WeaponTraits;
+import com.oblivioussp.spartanweaponry.api.trait.IGenericTraitCallback;
 import com.oblivioussp.spartanweaponry.api.trait.VersatileWeaponTrait;
 import com.oblivioussp.spartanweaponry.api.trait.WeaponTrait;
 import com.oblivioussp.spartanweaponry.client.ClientHelper;
@@ -104,10 +106,9 @@ public class SwordBaseItem extends SwordItem implements IWeaponTraitContainer<Sw
 		mapBuilder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", getDirectAttackDamage(), AttributeModifier.Operation.ADDITION));
 		mapBuilder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", attackSpeed - 4.0D, AttributeModifier.Operation.ADDITION));
 		
-		// Add melee attributes from Weapon Traits
-		if(traits != null)
-			traits.forEach((trait) ->
-				trait.getMeleeCallback().ifPresent((callback) -> callback.onModifyAttributesMelee(mapBuilder)));
+		// Add attributes from Weapon Traits
+//		if(traits != null)
+			traits.forEach((trait) -> getGenericCallback(trait).ifPresent((callback) -> callback.onModifyAttributes(mapBuilder)));
 		
 		modifiers = mapBuilder.build();
 	}
@@ -146,10 +147,7 @@ public class SwordBaseItem extends SwordItem implements IWeaponTraitContainer<Sw
 			LivingEntity living = (LivingEntity)entity;
 			
 			if(traits != null)
-			{
-				traits.forEach((trait) ->
-					trait.getMeleeCallback().ifPresent((callback) -> callback.onItemUpdate(material, stack, level, living, itemSlot, isSelected)));
-			}
+				traits.forEach((trait) -> getGenericCallback(trait).ifPresent((callback) -> callback.onItemUpdate(material, stack, level, living, itemSlot, isSelected)));
 		}
     }
 
@@ -338,8 +336,7 @@ public class SwordBaseItem extends SwordItem implements IWeaponTraitContainer<Sw
 	@Override
 	public void onCraftedBy(ItemStack stack, Level levelIn, Player playerIn) 
 	{
-		traits.forEach((trait) -> 
-			trait.getMeleeCallback().ifPresent((callback) -> callback.onCreateItem(material, stack)));
+		traits.forEach((trait) -> getGenericCallback(trait).ifPresent((callback) -> callback.onCreateItem(material, stack)));
 		super.onCraftedBy(stack, levelIn, playerIn);
 	}
 	
@@ -367,6 +364,20 @@ public class SwordBaseItem extends SwordItem implements IWeaponTraitContainer<Sw
     	}
     	// Sweeping Edge is incompatible with most weapons unless they have the Sweep I trait
         return enchantment != Enchantments.SWEEPING_EDGE && super.canApplyAtEnchantingTable(stack, enchantment);
+    }
+    
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) 
+    {
+    	int damage = amount;
+    	for(WeaponTrait trait : traits)
+    	{
+    		if(trait.getGenericCallback().isPresent())
+    			damage = trait.getGenericCallback().get().onDamageItem(stack, entity, damage);
+    		if(damage <= 0)
+    			break;
+    	}
+    	return Math.max(0, damage);
     }
     
     // IWeaponTraitContainer
@@ -420,6 +431,11 @@ public class SwordBaseItem extends SwordItem implements IWeaponTraitContainer<Sw
 	public WeaponMaterial getMaterial()
 	{
 		return material;
+	}
+	
+	private Optional<IGenericTraitCallback> getGenericCallback(WeaponTrait trait)
+	{
+		return trait.getMeleeCallback().isPresent() ? Optional.of(trait.getMeleeCallback().get()) : trait.getGenericCallback().isPresent() ? trait.getGenericCallback() : Optional.empty();
 	}
 	
 	public void setAttackDamageAndSpeed(float baseDamage, float damageMultiplier, double speed)
